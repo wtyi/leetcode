@@ -16,3 +16,18 @@ export function relativeSortArray(arr1: number[], arr2: number[]): number[] {
   result = result.concat(noArr.sort((a, b) => a - b));
   return result;
 }
+
+export function relativeSortArray1(arr1: number[], arr2: number[]): number[] {
+  let result: number[] = []; // 结果
+  for (let i = 0; i < arr2.length; i++) {
+    for (let j = 0; j < arr1.length; j++) {
+      if (arr1[j] == arr2[i]) {
+        result.push(arr2[i]);
+      }
+    }
+  }
+  result = result.concat([
+    ...arr1.filter((v) => !result.includes(v)).sort((a, b) => a - b),
+  ]);
+  return result;
+}

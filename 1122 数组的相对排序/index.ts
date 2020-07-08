@@ -12,17 +12,31 @@
  * 输出：[2,2,2,1,4,3,3,9,6,7,19]
  */
 function relativeSortArray(arr1: number[], arr2: number[]): number[] {
-  let result: number[] = []; // 结果
-  for (let i = 0; i < arr2.length; i++) {
-    for (let j = 0; j < arr1.length; j++) {
-      if (arr1[j] == arr2[i]) {
-        result.push(arr2[i]);
+  let map = new Map<number, number>();
+  let result: number[] = [];
+  for (let i = 0; i < arr1.length; i++) {
+    map.set(arr1[i], (map.get(arr1[i]) ?? 0) + 1);
+  }
+
+  for (let j = 0; j < arr2.length; j++) {
+    let len = map.get(arr2[j]) || 0;
+    for (let m = 0; m < len; m++) {
+      result.push(arr2[j]);
+    }
+    map.delete(arr2[j]);
+  }
+  let nowResult: number[] = [];
+  for (let n of map.entries()) {
+    let len = n[1];
+    if (len > 0) {
+      while (len > 0) {
+        nowResult.push(n[0]);
+        len--;
       }
     }
   }
-  result = result.concat([
-    ...arr1.filter((v) => !result.includes(v)).sort((a, b) => a - b),
-  ]);
+  nowResult.sort((a, b) => a - b);
+  result.push(...nowResult);
   return result;
 }
 
